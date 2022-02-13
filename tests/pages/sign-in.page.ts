@@ -5,19 +5,19 @@ import { Page } from "@playwright/test";
 export class SignInPage {
   private page: Page;
   constructor(page: Page) {
-    this.page = page
+    this.page = page;
   }
 
   //Locators
-  eleEmail = '[placeholder="user\@company\.com"]'
-  elePassword = '[placeholder="password"]'
-  eleSignInBtn = 'button:has-text("Log in")'
+  eleEmail = '[placeholder="user@company.com"]';
+  elePassword = '[placeholder="password"]';
+  eleSignInBtn = 'button:has-text("Log in")';
 
   //Actions
   public async signIn(email: string, password: string) {
-    await this.enterEmail(email)
-    await this.enterPassword(password)
-    await this.clickSignInBtn()
+    await this.enterEmail(email);
+    await this.enterPassword(password);
+    await this.clickSignInBtn();
   }
 
   public async enterEmail(email: string) {

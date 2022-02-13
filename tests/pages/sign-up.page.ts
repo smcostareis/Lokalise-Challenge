@@ -1,10 +1,10 @@
 import { Page } from "@playwright/test";
-import { faker } from '@faker-js/faker';
+import { faker } from "@faker-js/faker";
 
 export class SignUpPage {
   private page: Page;
   constructor(page: Page) {
-    this.page = page
+    this.page = page;
   }
 
   //Locators
@@ -18,7 +18,7 @@ export class SignUpPage {
   eleKindOfWork = 'button[aria-label="Software engineer"]';
   eleMainGoal = 'button[aria-label="Other"]';
   eleWhereContent = 'button[aria-label="Other"]';
-  eleCompleteSignUpBtn = 'button:has-text("Complete sign up")'
+  eleCompleteSignUpBtn = 'button:has-text("Complete sign up")';
 
   //Actions
   public async signUp() {
@@ -32,14 +32,13 @@ export class SignUpPage {
 
   public async welcome() {
     await this.page.fill(this.eleCompanyName, faker.company.companyName());
-    await this.page.locator(this.eleCompanySize).selectOption('1');
+    await this.page.locator(this.eleCompanySize).selectOption("1");
     await this.page.click(this.eleContinueWelcomeBtn);
     await this.page.click(this.eleKindOfWork);
     await this.page.click(this.eleMainGoal);
     await this.page.click(this.eleWhereContent);
     await this.page.click(this.eleCompleteSignUpBtn);
-    await this.page.waitForSelector('text=Quick start', { state: "visible" } );
+    await this.page.waitForSelector("text=Quick start", { state: "visible" });
     // await this.page.goto('/projects', { waitUntil: 'load' });
   }
-
 }
