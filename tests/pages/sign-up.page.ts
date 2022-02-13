@@ -38,7 +38,8 @@ export class SignUpPage {
     await this.page.click(this.eleMainGoal);
     await this.page.click(this.eleWhereContent);
     await this.page.click(this.eleCompleteSignUpBtn);
-    await this.page.goto('/projects', { waitUntil: 'load' });
+    await this.page.waitForSelector('text=Quick start', { state: "visible" } );
+    // await this.page.goto('/projects', { waitUntil: 'load' });
   }
 
 }

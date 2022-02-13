@@ -92,12 +92,13 @@ export class ProjectPage {
     await this.page.click(this.enTranslationButton);
     await this.page.fill(this.translationInput, 'Hello');
     await this.page.click(this.saveTranslationButton);
-    await this.page.waitForSelector('text=Hello');
+    await this.page.waitForSelector('text=Hello', { state: "visible" } );
 
     await this.page.click(this.ptTranslationButton);
     await this.page.fill(this.translationInput, 'Olá');
     await this.page.click(this.saveTranslationButton);
-    await this.page.waitForSelector(this.saveTranslationButton, { state: 'hidden' });
+    await this.page.waitForSelector('text=Olá', { state: "visible" } );
+    // await this.page.waitForSelector(this.saveTranslationButton, { state: 'hidden' });
   }
 
   public async addPluralTranslation() {
@@ -122,7 +123,8 @@ export class ProjectPage {
 
   public async waitProjectPageLoadTranslations() {
     await this.goToProjectsPage();
-    await this.goToProjec();
+    await this.goToProject();
+    await this.page.waitForSelector(this.enTranslationButton, { state: "visible" });
     // await expect(this.page.locator(this.enTranslationButton)).toHaveText('Hello');
     // await expect(this.page.locator(this.ptTranslationButton)).toHaveText('Olá');
     await this.goToProjectsPage();
@@ -130,8 +132,9 @@ export class ProjectPage {
 
   public async goToProjectsPage() {
     await this.page.click(this.projectNavItem)
+    await this.page.reload()
   }
-  public async goToProjec() {
+  public async goToProject() {
     await this.page.click(this.projectLinkButton)
   }
 }

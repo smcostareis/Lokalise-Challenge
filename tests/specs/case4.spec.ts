@@ -12,6 +12,7 @@ test.beforeAll(async ({ browser }) => {
 
   await page.goto('/signup', { waitUntil: 'load' });
   await signUp.signUp();
+  await page.goto('/projects', { waitUntil: 'load' });
   await project.addFirstProject();
   await page.goto('/projects', { waitUntil: 'load' })
   await project.addFirstKey()
@@ -34,8 +35,8 @@ test.describe('Case 4: Add translation for the key', () => {
     await expect(page.locator(project.enTranslationButton)).toHaveText('Hello');
     await expect(page.locator(project.ptTranslationButton)).toHaveText('Olá');
 
-    await project.waitProjectPageLoadTranslations()
-
+    // await project.waitProjectPageLoadTranslations()
+    await project.goToProjectsPage()
     await expect(page.locator(project.translationDone)).toHaveCount(3);
   });
 });

@@ -12,6 +12,7 @@ test.beforeAll(async ({ browser }) => {
 
   await page.goto('/signup', { waitUntil: 'load' });
   await signUp.signUp();
+  await page.goto('/projects', { waitUntil: 'load' });
   await project.addFirstProject();
   await page.goto('/projects', { waitUntil: 'load' })
   await project.addPluralKey()
@@ -36,7 +37,7 @@ test.describe('Case 5: Add translation for plural key', () => {
     await expect(page.locator(project.enPluralOtherBtn)).toHaveText('Hey');
     await expect(page.locator(project.ptPluralOtherBtn)).toHaveText('Oi');
 
-    await project.waitProjectPageLoadTranslations()
+    await project.goToProjectsPage()
 
     await expect(page.locator(project.translationDone)).toHaveCount(3);
   });
