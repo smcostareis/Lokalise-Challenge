@@ -82,18 +82,12 @@ export class ProjectPage {
       this.translationInput,
       "Hello"
     );
-    await this.page.waitForSelector(this.saveTranslationButton, {
-      state: "hidden",
-    });
     await this.page.waitForSelector("text=Hello", { state: "visible" });
     await this.fillTranslationModal(
       this.ptTranslationButton,
       this.translationInput,
       "Olá"
     );
-    await this.page.waitForSelector(this.saveTranslationButton, {
-      state: "hidden",
-    });
     await this.page.waitForSelector("text=Olá", { state: "visible" });
   }
 
@@ -103,24 +97,25 @@ export class ProjectPage {
       this.pluralOneInput,
       "Hello"
     );
+    await this.page.waitForSelector("text=Hello", { state: "visible" });
     await this.fillTranslationModal(
       this.enPluralOtherBtn,
       this.pluralOtherInput,
       "Hey"
     );
+    await this.page.waitForSelector("text=Hey", { state: "visible" });
     await this.fillTranslationModal(
       this.ptPluralOneBtn,
       this.pluralOneInput,
       "Olá"
     );
+    await this.page.waitForSelector("text=Olá", { state: "visible" });
     await this.fillTranslationModal(
       this.ptPluralOtherBtn,
       this.pluralOtherInput,
-      "Oi"
+      "Oí"
     );
-    await this.page.waitForSelector(this.saveTranslationButton, {
-      state: "hidden",
-    });
+    await this.page.waitForSelector("text=Oí", { state: "visible" });
   }
 
   public async fillKeyModal() {
@@ -136,9 +131,14 @@ export class ProjectPage {
     input: string,
     word: string
   ) {
+    await this.page.waitForSelector(button, { state: "visible" });
     await this.page.click(button);
+    await this.page.waitForSelector(input, { state: "visible" });
     await this.page.fill(input, word);
     await this.page.click(this.saveTranslationButton);
+    await this.page.waitForSelector(this.saveTranslationButton, {
+      state: "hidden",
+    });
   }
 
   public async fillNewProjectModal() {

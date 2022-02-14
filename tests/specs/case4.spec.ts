@@ -10,7 +10,7 @@ test.beforeAll(async ({ browser }) => {
   const signUp = new SignUpPage(page);
   const project = new ProjectPage(page);
 
-  await signUp.navigateToSignPage();
+  await signUp.navigateToSignUpPage();
   await signUp.completeSignUp();
   await project.navigateToLandingPage();
   await project.createFirstProject();

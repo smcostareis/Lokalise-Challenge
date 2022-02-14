@@ -14,7 +14,7 @@ const config: PlaywrightTestConfig = {
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    actionTimeout: 3000,
+    actionTimeout: 10000,
     baseURL: 'https://app.stage.lokalise.cloud/',
     trace: 'on-first-retry',
   },
@@ -22,23 +22,10 @@ const config: PlaywrightTestConfig = {
     {
       name: 'chromium',
       use: {
+        video: 'retain-on-failure',
         ...devices['Desktop Chrome'],
       },
     },
-
-    // {
-    //   name: 'firefox',
-    //   use: {
-    //     ...devices['Desktop Firefox'],
-    //   },
-    // },
-
-    // {
-    //   name: 'webkit',
-    //   use: {
-    //     ...devices['Desktop Safari'],
-    //   },
-    // },
   ],
 };
 
