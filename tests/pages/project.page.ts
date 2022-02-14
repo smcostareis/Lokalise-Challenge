@@ -1,6 +1,5 @@
-import { expect, Page } from "@playwright/test";
+import { Page } from "@playwright/test";
 import { faker } from "@faker-js/faker";
-
 export class ProjectPage {
   private page: Page;
   constructor(page: Page) {
@@ -46,103 +45,114 @@ export class ProjectPage {
   customPluralSwitch = 'div[class*="bootstrap-switch-id-theplural_key_switch"]';
 
   //Actions
-  public async addFirstProject() {
+  public async navigateToLandingPage() {
+    await this.page.goto("/projects", { waitUntil: "load" });
+  }
+
+  public async navigateToProjectPage() {
+    await this.page.click(this.projectNavItem);
+  }
+
+  public async createFirstProject() {
     await this.page.click(this.addFirstProjectButton);
-    await this.fillAddProjectModal();
+    await this.fillNewProjectModal();
   }
 
-  public async addNewProjects() {
+  public async createNewProjects() {
     await this.page.click(this.newProjectButton);
-    await this.fillAddProjectModal();
+    await this.fillNewProjectModal();
   }
 
-  public async fillAddProjectModal() {
-    await this.page.fill(this.projectNameInput, this.projName);
-    await this.page.locator(this.targetLangSelect).fill("Portug");
-    await this.page.click(this.langOption);
-    await this.page.click(this.proceedButton);
-  }
-
-  public async addFirstKey() {
-    await this.page.click(this.projectLinkButton);
-    await this.page.click(this.addKeyButton);
-    await this.page.fill(this.keyName, faker.commerce.productName());
-    await this.page.fill(this.platformsInput, "Web");
-    await this.page.click(this.platformOption);
+  public async createFirstKey() {
+    await this.fillKeyModal();
     await this.page.click(this.saveKeyEditorButton);
   }
 
-  public async addPluralKey() {
-    await this.page.click(this.projectLinkButton);
-    await this.page.click(this.addKeyButton);
-    await this.page.fill(this.keyName, faker.commerce.productName());
-    await this.page.fill(this.platformsInput, "Web");
-    await this.page.click(this.platformOption);
+  public async createPluralKey() {
+    await this.fillKeyModal();
     await this.page.click(this.keyAdvancedMenu);
     await this.page.click(this.pluralSwitch);
     await this.page.click(this.customPluralSwitch);
     await this.page.click(this.saveKeyEditorButton);
   }
 
-  public async addTranslation() {
-    await this.page.click(this.enTranslationButton);
-    await this.page.fill(this.translationInput, "Hello");
-    await this.page.click(this.saveTranslationButton);
+  public async createTranslation() {
+    await this.fillTranslationModal(
+      this.enTranslationButton,
+      this.translationInput,
+      "Hello"
+    );
     await this.page.waitForSelector(this.saveTranslationButton, {
       state: "hidden",
     });
     await this.page.waitForSelector("text=Hello", { state: "visible" });
-
-    await this.page.click(this.ptTranslationButton);
-    await this.page.fill(this.translationInput, "Olá");
-    await this.page.click(this.saveTranslationButton);
+    await this.fillTranslationModal(
+      this.ptTranslationButton,
+      this.translationInput,
+      "Olá"
+    );
     await this.page.waitForSelector(this.saveTranslationButton, {
       state: "hidden",
     });
     await this.page.waitForSelector("text=Olá", { state: "visible" });
   }
 
-  public async addPluralTranslation() {
-    await this.page.click(this.enPluralOneBtn);
-    await this.page.fill(this.pluralOneInput, "Hello");
-    await this.page.click(this.saveTranslationButton);
-
-    await this.page.click(this.enPluralOtherBtn);
-    await this.page.fill(this.pluralOtherInput, "Hey");
-    await this.page.click(this.saveTranslationButton);
-
-    await this.page.click(this.ptPluralOneBtn);
-    await this.page.fill(this.pluralOneInput, "Olá");
-    await this.page.click(this.saveTranslationButton);
-
-    await this.page.click(this.ptPluralOtherBtn);
-    await this.page.fill(this.pluralOtherInput, "Oi");
-    await this.page.click(this.saveTranslationButton);
-
+  public async createPluralTranslation() {
+    await this.fillTranslationModal(
+      this.enPluralOneBtn,
+      this.pluralOneInput,
+      "Hello"
+    );
+    await this.fillTranslationModal(
+      this.enPluralOtherBtn,
+      this.pluralOtherInput,
+      "Hey"
+    );
+    await this.fillTranslationModal(
+      this.ptPluralOneBtn,
+      this.pluralOneInput,
+      "Olá"
+    );
+    await this.fillTranslationModal(
+      this.ptPluralOtherBtn,
+      this.pluralOtherInput,
+      "Oi"
+    );
     await this.page.waitForSelector(this.saveTranslationButton, {
       state: "hidden",
     });
   }
 
-  public async waitProjectPageLoadTranslations() {
-    await this.goToProjectsPage();
-    await this.goToProject();
-    await this.page.waitForSelector(this.enTranslationButton, {
-      state: "visible",
-    });
-    // await expect(this.page.locator(this.enTranslationButton)).toHaveText('Hello');
-    // await expect(this.page.locator(this.ptTranslationButton)).toHaveText('Olá');
-    await this.goToProjectsPage();
+  public async fillKeyModal() {
+    await this.page.click(this.projectLinkButton);
+    await this.page.click(this.addKeyButton);
+    await this.page.fill(this.keyName, faker.commerce.productName());
+    await this.page.fill(this.platformsInput, "Web");
+    await this.page.click(this.platformOption);
   }
 
-  public async goToProjectsPage() {
+  public async fillTranslationModal(
+    button: string,
+    input: string,
+    word: string
+  ) {
+    await this.page.click(button);
+    await this.page.fill(input, word);
+    await this.page.click(this.saveTranslationButton);
+  }
+
+  public async fillNewProjectModal() {
+    await this.page.fill(this.projectNameInput, this.projName);
+    await this.page.locator(this.targetLangSelect).fill("Portug");
+    await this.page.click(this.langOption);
+    await this.page.click(this.proceedButton);
+  }
+
+  public async waitTranslationsToRender() {
     await this.page.click(this.projectNavItem);
     await this.page.waitForSelector("text=Lokalise", { state: "visible" });
     await this.page.click(this.projectLinkButton);
     await this.page.waitForSelector("text=Olá", { state: "visible" });
     await this.page.click(this.projectNavItem);
-  }
-  public async goToProject() {
-    await this.page.click(this.projectLinkButton);
   }
 }

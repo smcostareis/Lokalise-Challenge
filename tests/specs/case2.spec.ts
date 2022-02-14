@@ -10,12 +10,12 @@ test.beforeAll(async ({ browser }) => {
   const signUp = new SignUpPage(page);
   const project = new ProjectPage(page);
 
-  await page.goto("/signup", { waitUntil: "load" });
-  await signUp.signUp();
-  await page.goto("/projects", { waitUntil: "load" });
-  await project.addFirstProject();
+  await signUp.navigateToSignPage();
+  await signUp.completeSignUp();
+  await project.navigateToLandingPage();
+  await project.createFirstProject();
 
-  await page.goto("/projects", { waitUntil: "load" });
+  await project.navigateToProjectPage();
   await expect(page.locator(project.sidebarProjects)).toHaveCount(1);
 });
 
@@ -27,9 +27,9 @@ test.describe("Case 2: Add nth project", () => {
   test("Add project with just required fields", async () => {
     const project = new ProjectPage(page);
 
-    await project.addNewProjects();
+    await project.createNewProjects();
     await expect(page.locator(project.projectEditorview)).toBeVisible();
-    await page.goto("/projects", { waitUntil: "load" });
+    await project.navigateToProjectPage();
     await expect(page.locator(project.sidebarProjects)).toHaveCount(2);
     await expect(page.locator(project.lastProjectAdded)).toHaveText(
       project.projName

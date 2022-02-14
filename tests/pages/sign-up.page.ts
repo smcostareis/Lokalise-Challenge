@@ -1,6 +1,5 @@
 import { Page } from "@playwright/test";
 import { faker } from "@faker-js/faker";
-
 export class SignUpPage {
   private page: Page;
   constructor(page: Page) {
@@ -21,16 +20,20 @@ export class SignUpPage {
   eleCompleteSignUpBtn = 'button:has-text("Complete sign up")';
 
   //Actions
-  public async signUp() {
+  public async navigateToSignPage() {
+    await this.page.goto("/signup", { waitUntil: "load" });
+  }
+
+  public async completeSignUp() {
     await this.page.waitForSelector(this.eleFullName, { state: "visible" });
     await this.page.fill(this.eleFullName, faker.name.firstName());
     await this.page.fill(this.eleEmail, faker.internet.email());
     await this.page.fill(this.elePassword, faker.internet.password(9));
     await this.page.click(this.eleSignUpBtn);
-    await this.welcome();
+    await this.onboarding();
   }
 
-  public async welcome() {
+  public async onboarding() {
     await this.page.fill(this.eleCompanyName, faker.company.companyName());
     await this.page.locator(this.eleCompanySize).selectOption("1");
     await this.page.click(this.eleContinueWelcomeBtn);
@@ -39,6 +42,5 @@ export class SignUpPage {
     await this.page.click(this.eleWhereContent);
     await this.page.click(this.eleCompleteSignUpBtn);
     await this.page.waitForSelector("text=Quick start", { state: "visible" });
-    // await this.page.goto('/projects', { waitUntil: 'load' });
   }
 }

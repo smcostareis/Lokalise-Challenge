@@ -10,12 +10,12 @@ test.beforeAll(async ({ browser }) => {
   const signUp = new SignUpPage(page);
   const project = new ProjectPage(page);
 
-  await page.goto("/signup", { waitUntil: "load" });
-  await signUp.signUp();
-  await page.goto("/projects", { waitUntil: "load" });
-  await project.addFirstProject();
-  await page.goto("/projects", { waitUntil: "load" });
-  await project.addPluralKey();
+  await signUp.navigateToSignPage();
+  await signUp.completeSignUp();
+  await project.navigateToLandingPage();
+  await project.createFirstProject();
+  await project.navigateToProjectPage();
+  await project.createPluralKey();
 
   await expect(page.locator(project.projectHearder)).toBeVisible();
   await expect(page.locator(project.projectKeyCount)).toHaveCount(2);
@@ -28,16 +28,13 @@ test.afterAll(async () => {
 test.describe("Case 5: Add translation for plural key", () => {
   test("Add translation for plural key", async () => {
     const project = new ProjectPage(page);
-    await project.addPluralTranslation();
 
+    await project.createPluralTranslation();
     await expect(page.locator(project.enPluralOneBtn)).toHaveText("Hello");
     await expect(page.locator(project.ptPluralOneBtn)).toHaveText("Olá");
-
     await expect(page.locator(project.enPluralOtherBtn)).toHaveText("Hey");
     await expect(page.locator(project.ptPluralOtherBtn)).toHaveText("Oi");
-
-    await project.goToProjectsPage();
-
+    await project.waitTranslationsToRender();
     await expect(page.locator(project.translationDone)).toHaveCount(3);
   });
 });

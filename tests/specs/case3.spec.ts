@@ -10,12 +10,12 @@ test.beforeAll(async ({ browser }) => {
   const signUp = new SignUpPage(page);
   const project = new ProjectPage(page);
 
-  await page.goto("/signup", { waitUntil: "load" });
-  await signUp.signUp();
-  await page.goto("/projects", { waitUntil: "load" });
-  await project.addFirstProject();
+  await signUp.navigateToSignPage();
+  await signUp.completeSignUp();
+  await project.navigateToLandingPage();
+  await project.createFirstProject();
 
-  await page.goto("/projects", { waitUntil: "load" });
+  await project.navigateToProjectPage();
   await expect(page.locator(project.sidebarProjects)).toHaveCount(1);
 });
 
@@ -26,7 +26,7 @@ test.afterAll(async () => {
 test.describe("Case 3: Add first key", () => {
   test("Add key with just required fields", async () => {
     const project = new ProjectPage(page);
-    await project.addFirstKey();
+    await project.createFirstKey();
 
     await expect(page.locator(project.projectHearder)).toBeVisible();
     await expect(page.locator(project.projectKeyCount)).toHaveCount(1);

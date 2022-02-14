@@ -10,12 +10,12 @@ test.beforeAll(async ({ browser }) => {
   const signUp = new SignUpPage(page);
   const project = new ProjectPage(page);
 
-  await page.goto("/signup", { waitUntil: "load" });
-  await signUp.signUp();
-  await page.goto("/projects", { waitUntil: "load" });
-  await project.addFirstProject();
-  await page.goto("/projects", { waitUntil: "load" });
-  await project.addFirstKey();
+  await signUp.navigateToSignPage();
+  await signUp.completeSignUp();
+  await project.navigateToLandingPage();
+  await project.createFirstProject();
+  await project.navigateToProjectPage();
+  await project.createFirstKey();
 
   await expect(page.locator(project.projectHearder)).toBeVisible();
   await expect(page.locator(project.projectKeyCount)).toHaveCount(1);
@@ -28,13 +28,10 @@ test.afterAll(async () => {
 test.describe("Case 4: Add translation for the key", () => {
   test("Add translation for the key", async () => {
     const project = new ProjectPage(page);
-    await project.addTranslation();
-
+    await project.createTranslation();
     await expect(page.locator(project.enTranslationButton)).toHaveText("Hello");
     await expect(page.locator(project.ptTranslationButton)).toHaveText("Olá");
-
-    // await project.waitProjectPageLoadTranslations()
-    await project.goToProjectsPage();
+    await project.waitTranslationsToRender();
     await expect(page.locator(project.translationDone)).toHaveCount(3);
   });
 });
